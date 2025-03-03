@@ -1,0 +1,3 @@
+
+    <script src="https://unpkg.com/preline@latest/dist/preline.js"></script>
+    require 'vendor/dompdf/autoload.inc.php';// Ensure correct path
