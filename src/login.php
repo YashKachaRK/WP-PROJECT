@@ -6,28 +6,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $query = "SELECT id, full_name, password FROM users_register WHERE email = ?";
+    $admin_id = $_POST['email']; // assuming input field name is "email"
+    $password = $_POST['password'];
+
+    $query = "SELECT id, admin_id, password FROM admin_login WHERE admin_id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $email);
+    $stmt->bind_param("s", $admin_id);
     $stmt->execute();
-    $stmt->store_result();
-    
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($id, $full_name, $hashed_password);
-        $stmt->fetch();
-        if (password_verify($password, $hashed_password)) {
-            $_SESSION['user_id'] = $id;
-            $_SESSION['full_name'] = $full_name;
-            header("Location: index.php");
+    $result = $stmt->get_result();
+
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if ($password == $row['password']) {
+            $_SESSION['admin_id'] = $row['id'];
+            $_SESSION['admin_email'] = $row['admin_id'];
+            header("Location: admin/dashboard.php"); // go to admin panel
             exit();
         } else {
-            $_SESSION['error'] = "Invalid credentials.";
+            $_SESSION['error'] = "Wrong password.";
         }
     } else {
-        $_SESSION['error'] = "No user found with that email.";
+        $_SESSION['error'] = "Admin not found.";
     }
-}
+   // 2. Check in users_register table
+        $user_query = "SELECT id, full_name, password FROM users_register WHERE email = ?";
+        $user_stmt = $conn->prepare($user_query);
+        $user_stmt->bind_param("s", $email);
+        $user_stmt->execute();
+        $user_stmt->store_result();
+        
+        if ($user_stmt->num_rows > 0) {
+            $user_stmt->bind_result($id, $full_name, $hashed_password);
+            $user_stmt->fetch();
+            if (password_verify($password, $hashed_password)) {
+                $_SESSION['user_id'] = $id;
+                $_SESSION['full_name'] = $full_name;
+                header("Location: index.php");
+                exit();
+            } else {
+                $_SESSION['error'] = "Invalid user credentials.";
+            }
+        } else {
+            $_SESSION['error'] = "No user or admin found with that email.";
+        }
+    }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </label>
                             </div>
                             <div>
-                                <a href="javascript:void(0);" class="text-blue-600 font-semibold text-sm hover:underline">
+                                <a href="forgot_password.php" class="text-blue-600 font-semibold text-sm hover:underline">
                                   Forgot Password?
                                 </a>
                             </div>

@@ -15,7 +15,17 @@ include_once("asset/db_connection.php"); // Database connection
     <?php include_once("asset/sidebar.php") ?>
 
     <main class="md:ml-64 p-8 transition-all duration-300">
-        <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Orders</h2>
+        <nav class="text-sm text-gray-600">
+            <ol class="flex space-x-2">
+                <li><a href="dashboard.php" class="hover:text-gray-900">Home</a></li>
+                <li>/</li>
+                <li><span class="hover:text-gray-900 font-semibold">Orders</span></li>
+            </ol>
+        </nav>
+
+        <div class="flex justify-between items-center mt-4">
+            <h1 class="text-3xl font-bold text-gray-800">All Orders</h1>
+        </div>
 
         <!-- Search Input -->
         <div class="mb-6">

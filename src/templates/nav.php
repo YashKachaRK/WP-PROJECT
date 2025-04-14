@@ -83,23 +83,24 @@ if (isset($_SESSION['user_id'])) {
                 <a href="booked.php" class="text-black font-medium hover:text-gray-600"><i
                         class="fas fa-shopping-cart"></i> Booked</a>
             </div>
-
             <!-- Profile Dropdown -->
             <div class="hidden md:flex items-center space-x-4">
+            <?php if (isset($_SESSION['user_id'])): ?>
+
                 <div class="hs-dropdown relative">
                     <button id="profileDropdown" type="button"
                         class="flex items-center text-black font-medium space-x-2">
                         <img src="img/profile.png" alt="Profile" class="w-9 h-9 rounded-full" />
-                        <span>My Account</span>
                         <?php if (isset($user)): ?>
-                            <span> - <?php echo htmlspecialchars($user['full_name']); ?></span>
+                            <span> <?php echo htmlspecialchars($user['full_name']); ?></span>
                         <?php endif; ?>
                     </button>
 
                     <div class="hs-dropdown-menu absolute right-0 hidden w-44 bg-white rounded-md shadow-md py-2 z-10">
                         <a href="profile.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100"><i
                                 class="fas fa-user"></i> Profile</a>
-                        <?php if (isset($_SESSION['user_id'])): ?>
+                         
+                       <?php if (isset($_SESSION['user_id'])): ?>
                             <a href="logout.php" class="block px-4 py-2 text-red-600 hover:bg-gray-100">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
@@ -110,6 +111,11 @@ if (isset($_SESSION['user_id'])) {
                         <?php endif; ?>
                     </div>
                 </div>
+                <?php else: ?>
+                    <a href="login.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                <?php endif; ?>
             </div>
 
             <!-- Mobile Menu Button -->

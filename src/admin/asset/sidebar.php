@@ -8,7 +8,7 @@
 
     <!-- Sidebar -->
     <aside id="sidebar" class="w-64 bg-white shadow-lg h-screen p-5 fixed top-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
-        <div class="text-2xl font-bold text-center py-4">Logo</div>
+        <div class="text-2xl font-bold text-center py-4">RentWear</div>
         <nav>
             <ul class="space-y-4">
                 <li><a href="dashboard.php" class="block p-3 rounded-lg hover:bg-gray-200">🏠 Dashboard</a></li>
@@ -86,8 +86,6 @@
 
 
                 <li><a href="customer.php" class="block p-3 rounded-lg hover:bg-gray-200">👥 Customers</a></li>
-                <li><a href="#" class="block p-3 rounded-lg hover:bg-gray-200">📊 Reports</a></li>
-                <li><a href="#" class="block p-3 rounded-lg hover:bg-gray-200">⚙️ Settings</a></li>
             </ul>
         </nav>
     </aside>

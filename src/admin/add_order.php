@@ -1,3 +1,20 @@
+<?php
+include 'asset/db_connection.php';
+
+// Fetch products from database
+$productQuery = "
+    SELECT p.id, p.product_name, p.rental_price 
+    FROM products p 
+    WHERE p.id NOT IN (
+        SELECT product_id FROM orders WHERE status = 'Rented'
+    )
+";
+
+$result = mysqli_query($conn, $productQuery);
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,27 +84,34 @@
                 </div>
 
                 <!-- Product ID -->
+               
                 <div>
                     <label class="block font-medium text-gray-700">🔖 Product ID</label>
-                    <input type="text" name="product_id" required
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm"
-                        placeholder="Enter product ID">
+                    <select name="product_id" id="product_id" required
+                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm">
+                        <option value="">Select Product</option>
+                        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                            <option value="<?= $row['id']; ?>" 
+                                    data-name="<?= $row['product_name']; ?>" 
+                                    data-price="<?= $row['rental_price']; ?>">
+                                <?= $row['id']; ?>
+                            </option>
+                        <?php } ?>
+                    </select>
                 </div>
 
-                <!-- Product Name -->
+                <!-- Product Name (Auto-filled) -->
                 <div>
                     <label class="block font-medium text-gray-700">📦 Product Name</label>
-                    <input type="text" name="product_name" required
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm"
-                        placeholder="Enter product name">
+                    <input type="text" id="product_name" name="product_name" required readonly
+                        class="w-full mt-1 px-4 py-2 border bg-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm">
                 </div>
 
-                <!-- Product Amount -->
+                <!-- Product Amount (Auto-filled) -->
                 <div>
                     <label class="block font-medium text-gray-700">💰 Product Amount</label>
-                    <input type="number" id="total_amount" name="total_amount" required
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm"
-                        placeholder="Enter total amount">
+                    <input type="number" id="total_amount" name="total_amount" required readonly
+                        class="w-full mt-1 px-4 py-2 border bg-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm">
                 </div>
 
                 <!-- Deposit Amount -->
@@ -145,12 +169,14 @@
             </form>
 
             <!-- Download Bill Button (Initially Hidden) -->
-            <div id="downloadBill" class="mt-4 hidden text-center">
+   <!-- Download Bill Button (Initially Hidden) -->
+        <div id="downloadBill" class="mt-4 hidden text-center">
                 <a id="billLink" href="#" target="_blank"
                     class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 transition">
                     📄 Download Bill
                 </a>
             </div>
+
 
             
 
@@ -178,7 +204,7 @@
         });
     </script>
 <script>
-    document.getElementById('orderForm').addEventListener('submit', function (event) {
+        document.getElementById('orderForm').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
 
         let formData = new FormData(this);
@@ -193,13 +219,27 @@
                 let billLink = document.getElementById('billLink');
                 billLink.href = `generate_bill.php?order_id=${data.order_id}`;
                 document.getElementById('downloadBill').classList.remove('hidden');
+
             } else {
                 alert('Error: ' + data.error);
             }
         })
         .catch(error => console.error('Error:', error));
     });
-</script>
+
+
+
+        document.getElementById('product_id').addEventListener('change', function () {
+        let selectedOption = this.options[this.selectedIndex];
+
+        let productName = selectedOption.getAttribute('data-name');
+        let productPrice = selectedOption.getAttribute('data-price');
+
+        document.getElementById('product_name').value = productName;
+        document.getElementById('total_amount').value = productPrice;
+    });
+
+    </script>
 
 
 <!-- <script>

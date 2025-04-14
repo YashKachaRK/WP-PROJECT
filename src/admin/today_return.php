@@ -69,8 +69,14 @@ $order = $result->fetch_assoc();
                         <?= $order['status']; ?>
                     </span>
                 </p>
-                <p class="flex items-center"><span class="font-semibold w-40 text-gray-800">Order Date:</span> <?= $order['order_date']; ?></p>
-                <p class="flex items-center"><span class="font-semibold w-40 text-gray-800">Return Date:</span> <?= $order['return_date']; ?></p>
+                <p class="flex items-center">
+                    <span class="font-semibold w-40 text-gray-800">Order Date:</span> 
+                    <?= date('d-m-Y', strtotime($order['order_date'])); ?>
+                </p>
+                <p class="flex items-center">
+                    <span class="font-semibold w-40 text-gray-800">Return Date:</span> 
+                    <?= date('d-m-Y', strtotime($order['return_date'])); ?>
+                </p>
             </div>
 
            

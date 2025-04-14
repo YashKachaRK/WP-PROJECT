@@ -65,8 +65,9 @@ $result = $stmt->get_result();
                     ?>
                 </select>
             </td>
-            <td class="px-6 py-4 text-sm text-gray-600"><?= $order['order_date']; ?></td>
-            <td class="px-6 py-4 text-sm text-gray-600"><?= $order['return_date']; ?></td>
+            <td class="px-6 py-4 text-sm text-gray-600"><?= date('d-m-Y', strtotime($order['order_date'])); ?></td>
+            <td class="px-6 py-4 text-sm text-gray-600"><?= date('d-m-Y', strtotime($order['return_date'])); ?></td>
+
             <td class="px-6 py-4">
                 <a href="rented_details.php?id=<?= $order['id']; ?>" class="text-blue-600 font-semibold hover:underline">View</a>
             </td>
